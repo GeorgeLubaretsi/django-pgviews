@@ -109,7 +109,7 @@ def create_view(connection, view_name, view_query, update=True, force=False,
 
         if materialized:
             cursor.execute('DROP MATERIALIZED VIEW IF EXISTS {0} CASCADE;'.format(view_name))
-            cursor.execute('CREATE MATERIALIZED VIEW {0} AS {1};'.format(view_name, view_query))
+            cursor.execute('CREATE MATERIALIZED VIEW IF NOT EXISTS {0} AS {1};'.format(view_name, view_query))
             if index is not None:
                 cursor.execute('CREATE UNIQUE INDEX IF NOT EXISTS {0}_{1}_index ON {0} ({1})'.format(view_name, index))
             ret = view_exists and 'UPDATED' or 'CREATED'
